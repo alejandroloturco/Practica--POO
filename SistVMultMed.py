@@ -51,19 +51,24 @@ class Mascota:
         self.__fecha_ingreso = fecha.strftime("%d/%m/%Y") 
     def asignarLista_Medicamentos(self,n):
         self.__lista_medicamentos = n 
+    def verificarMedicamento(self,med):
+        for m in self.__lista_medicamentos:
+            if m.verNombre() == med:
+                return True        
+        return False
     
 class sistemaV:
     def __init__(self):
-        self.__lista_perro = {}
+        self.__lista_mascotas = []
         self.__lista_gato = {}
+        self.__lista_perro = {}
     
     def verificarExiste(self,historia):
         for m in self.__lista_mascotas:
             if historia == m.verHistoria():
-                return True
-        #solo luego de haber recorrido todo el ciclo se retorna False
-        return False
-        
+                return True        
+        return False   
+    
     def verNumeroMascotas(self):
         return len(self.__lista_mascotas) 
     
@@ -130,20 +135,26 @@ def main():
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 lista_med=[]
 
-                for i in range(0,nm):
-                    nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
-                    dosis =int(input("Ingrese la dosis: "))
-                    medicamento = Medicamento()
-                    medicamento.asignarNombre(nombre_medicamentos)
-                    medicamento.asignarDosis(dosis)
-                    lista_med.append(medicamento)
-
                 mas= Mascota()
                 mas.asignarNombre(nombre)
                 mas.asignarHistoria(historia)
                 mas.asignarPeso(peso)
                 mas.asignarTipo(tipo)
-                mas.asignarFecha()
+                mas.asignarFecha()            
+                
+                i = 0 
+                while i < nm:
+                    nombre_medicamentos = input("Ingrese el nombre del medicamento: ")
+                    if mas.verificarMedicamento(nombre_medicamentos):
+                        print("Medicamento ya registrado")
+                        continue
+                    dosis =int(input("Ingrese la dosis: "))
+                    medicamento = Medicamento()
+                    medicamento.asignarNombre(nombre_medicamentos)
+                    medicamento.asignarDosis(dosis)
+                    lista_med.append(medicamento)
+                    i+=1
+
                 mas.asignarLista_Medicamentos(lista_med)
                 servicio_hospitalario.ingresarMascota(mas)
 
