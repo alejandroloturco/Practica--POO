@@ -1,3 +1,5 @@
+from datetime import datetime
+
 class Medicamento:
     def __init__(self):
         self.__nombre = "" 
@@ -44,8 +46,9 @@ class Mascota:
         self.__tipo=t
     def asignarPeso(self,p):
         self.__peso=p
-    def asignarFecha(self,f):
-        self.__fecha_ingreso=f
+    def asignarFecha(self):
+        fecha = datetime.now()
+        self.__fecha_ingreso = fecha.strftime("%d/%m/%Y") 
     def asignarLista_Medicamentos(self,n):
         self.__lista_medicamentos = n 
     
@@ -85,12 +88,24 @@ class sistemaV:
         for masc in self.__lista_mascotas:
             if historia == masc.verHistoria():
                 self.__lista_mascotas.remove(masc)  #opcion con el pop
-                return True  #eliminado con exito
+                return True  
+        return False
+     
+    def eliminarMedicamento(self, historia):
+        for masc in self.__lista_mascotas:
+            if historia == masc.verHistoria():
+                if masc.verLista_Medicamentos() != []:
+                    for i in range(len(masc.verLista_Medicamentos())):
+                        print(f"{i+1}. {masc.verLista_Medicamentos()[i].verNombre()}")
+                    selec = int(input("Escoja el medicamento a eliminar"))
+                    masc.verLista_Medicamentos().remove(masc.verLista_Medicamentos()[selec-1])
+                    return True  #eliminado con exito"""
+                else:
+                    print("No hay medicamentos para esta mascota")                    
         return False 
 
 def main():
     servicio_hospitalario = sistemaV()
-    # sistma=sistemaV()
     while True:
         menu=int(input('''\nIngrese una opción: 
                        \n1- Ingresar una mascota 
@@ -98,7 +113,8 @@ def main():
                        \n3- Ver número de mascotas en el servicio 
                        \n4- Ver medicamentos que se están administrando
                        \n5- Eliminar mascota 
-                       \n6- Salir 
+                       \n6- Eliminar medicamento
+                       \n7- Salir 
                        \nUsted ingresó la opción: ''' ))
         if menu==1: # Ingresar una mascota 
             if servicio_hospitalario.verNumeroMascotas() >= 10:
@@ -109,8 +125,7 @@ def main():
             if servicio_hospitalario.verificarExiste(historia) == False:
                 nombre=input("Ingrese el nombre de la mascota: ")
                 tipo=input("Ingrese el tipo de mascota (felino o canino): ")
-                peso=int(input("Ingrese el peso de la mascota: "))
-                fecha=input("Ingrese la fecha de ingreso (dia/mes/año): ")
+                peso=int(input("Ingrese el peso de la mascota: "))                
                 nm=int(input("Ingrese cantidad de medicamentos: "))
                 lista_med=[]
 
@@ -127,7 +142,7 @@ def main():
                 mas.asignarHistoria(historia)
                 mas.asignarPeso(peso)
                 mas.asignarTipo(tipo)
-                mas.asignarFecha(fecha)
+                mas.asignarFecha()
                 mas.asignarLista_Medicamentos(lista_med)
                 servicio_hospitalario.ingresarMascota(mas)
 
@@ -157,7 +172,6 @@ def main():
             else:
                 print("La historia clínica ingresada no corresponde con ninguna mascota en el sistema.")
 
-        
         elif menu == 5: # Eliminar mascota
             q = int(input("Ingrese la historia clínica de la mascota: "))
             resultado_operacion = servicio_hospitalario.eliminarMascota(q) 
@@ -167,9 +181,14 @@ def main():
                 print("No se ha podido eliminar la mascota")
         
         elif menu==6:
-            print("Usted ha salido del sistema de servicio de hospitalización...")
-            break
+            his = int(input("Ingrese historia: "))
+            servicio_hospitalario.eliminarMedicamento(his)
+            continue
         
+        elif menu==7:
+            print("Usted ha salido del sistema de servicio de hospitalización...")
+            break      
+                
         else:
             print("Usted ingresó una opción no válida, intentelo nuevamente...")
 
@@ -181,6 +200,9 @@ if __name__=='__main__':
 
 
             
+
+                
+
 
                 
 
